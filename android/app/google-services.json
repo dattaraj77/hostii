@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "276621276267",
+    "project_id": "hostel-management-cfe04",
+    "storage_bucket": "hostel-management-cfe04.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:276621276267:android:ec69a03754b7351aef2d2e",
+        "android_client_info": {
+          "package_name": "com.hostii.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAsk3IOqPc_g3NrokaBapcs0oOqnWgKpwA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
