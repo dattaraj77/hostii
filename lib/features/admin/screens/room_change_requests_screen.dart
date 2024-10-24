@@ -121,10 +121,10 @@ class RoomCard extends StatelessWidget {
                 Column(
                   children: [
                     heightSpacer(20),
-                    Image.asset(
-                      'assets/person.png', // Replace with your asset path
-                      height: 70.h,
-                      width: 70.w,
+                    Icon(
+                      Icons.account_circle,
+                      size: 70.sp,
+                      color: const Color(0xFF2E8B57),
                     ),
                     heightSpacer(10),
                     Text(

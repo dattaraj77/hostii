@@ -1,23 +1,23 @@
 class AppConstants {
-  static const appName = 'Hostel Management';
+  static const appName = 'Hostii';
 
 // assets
-  static const logo = 'assets/logo.jpg';
-  static const bed = 'assets/bed.png';
-  static const profile = 'assets/images/profile.png';
+  static const logo = 'images/logo.jpg';
+  static const bed = 'images/bed.png';
+  static const profile = 'images/profile.png';
   static const createIssue = 'images/issue_boximg.jpg';
-  static const roomAvailability = 'room_availibilityimg.jpg';
-  static const allIssues = 'assets/all_issues.png';
-  static const createStaff = 'assets/images/create_staff.png';
-  static const hostelFee = 'assets/images/hostel_fee.png';
-  static const person = 'assets/person.png';
-  static const hostel = 'assets/hostel.svg';
+  static const roomAvailability = 'images/bed.png';
+  static const allIssues = 'images/all_issues.png';
+  static const createStaff = 'images/create_staff.png';
+  static const hostelFee = 'images/hostel_feesimg.jpg';
+  static const person = 'images/person.png';
+  static const hostel = 'images/hostel.svg';
   static const staffMember = 'images/staff_memimg.jpg';
-  static const roomChange = 'assets/change_requests.png';
-  static const String raiseIssue = 'assets/icons/raise_issue.svg';
-  static const String showAllIssues = 'assets/images/all_issues.png';
-  static const String showStaff = 'assets/images/staff_members.png';
-  static const String changeRequest = 'assets/images/change_request.png';
+  static const roomChange = 'images/change_requests.png';
+  static const String raiseIssue = 'images/issue_boximg.jpg';
+  static const String showAllIssues = 'images/issue_boximg.jpg';
+  static const String showStaff = 'images/staff_memimg.jpg';
+  static const String changeRequest = 'images/change_requests.png';
 
   //svg function
 }

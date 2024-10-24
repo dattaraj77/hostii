@@ -75,7 +75,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
           IconButton(
             icon: const Icon(Icons.logout, color: Colors.white),
             onPressed: () {
-              // Mock logout action
               Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
@@ -87,110 +86,149 @@ class _ProfileScreenState extends State<ProfileScreen> {
         ],
       ),
       body: SingleChildScrollView(
-        child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 15.w),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              SvgPicture.asset(AppConstants.profile,
-                  height: 180.h, width: 180.w),
-              heightSpacer(10),
-              Text(
-                '${userData['firstName'] ?? ''} ${userData['lastName'] ?? ''}',
-                style: const TextStyle(
-                    color: Color(0xFF333333),
-                    fontSize: 24,
-                    fontWeight: FontWeight.w700),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Container(
+              width: double.infinity,
+              height: 200.h,
+              decoration: BoxDecoration(
+                color: AppColors.kGreenColor.withOpacity(0.1),
               ),
-              heightSpacer(30),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  Expanded(
-                    child: Container(
-                      padding: const EdgeInsets.all(10),
-                      decoration: ShapeDecoration(
-                        shape: RoundedRectangleBorder(
-                          side: const BorderSide(
-                              width: 1, color: Color(0xFF2E8B57)),
-                          borderRadius: BorderRadius.circular(14),
-                        ),
-                      ),
-                      child: Text(
-                        'Room No - ${userData['roomNumber'] ?? ''}',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            color: const Color(0xFF333333), fontSize: 17.sp),
-                      ),
+              child: Center(
+                child: Container(
+                  width: 140.w,
+                  height: 140.h,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    border: Border.all(
+                      color: AppColors.kGreenColor,
+                      width: 3.w,
                     ),
-                  ),
-                  widthSpacer(30),
-                  Expanded(
-                    child: Container(
-                      padding: const EdgeInsets.all(10),
-                      decoration: ShapeDecoration(
-                        shape: RoundedRectangleBorder(
-                          side: const BorderSide(
-                              width: 1, color: Color(0xFF2E8B57)),
-                          borderRadius: BorderRadius.circular(14),
-                        ),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.1),
+                        spreadRadius: 2,
+                        blurRadius: 5,
+                        offset: Offset(0, 3),
                       ),
-                      child: Text(
-                        'Block No - ${userData['block'] ?? ''}',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            color: const Color(0xFF333333), fontSize: 17.sp),
-                      ),
-                    ),
+                    ],
                   ),
-                ],
-              ),
-              heightSpacer(20),
-              Container(
-                padding: const EdgeInsets.all(12),
-                decoration: ShapeDecoration(
-                  shape: RoundedRectangleBorder(
-                    side: const BorderSide(width: 1, color: Color(0xFF2E8B57)),
-                    borderRadius: BorderRadius.circular(14),
+                  child: Icon(
+                    Icons.account_circle, // Changed to profile icon
+                    size: 80.sp,
+                    color: AppColors.kGreenColor,
                   ),
                 ),
-                child: Text(
-                  userData['emailId'] ?? '',
-                  style: TextStyle(
-                      color: AppColors.kSecondaryColor, fontSize: 17.sp),
-                ),
               ),
-              heightSpacer(20),
-              CustomTextField(
-                controller: username,
-                inputHint: 'Username',
-                prefixIcon: const Icon(Icons.person_2_outlined),
-              ),
-              heightSpacer(20),
-              CustomTextField(
-                controller: phoneNumber,
-                inputHint: 'Phone Number',
-                prefixIcon: const Icon(Icons.phone_outlined),
-              ),
-              heightSpacer(20),
-              Row(
+            ),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 15.w),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Expanded(
-                      child: CustomTextField(
-                          controller: firstName, inputHint: 'First Name')),
-                  widthSpacer(20),
-                  Expanded(
-                      child: CustomTextField(
-                          controller: lastName, inputHint: 'Last Name')),
+                  heightSpacer(20),
+                  Text(
+                    '${userData['firstName'] ?? ''} ${userData['lastName'] ?? ''}',
+                    style: TextStyle(
+                        color: Color(0xFF333333),
+                        fontSize: 24.sp,
+                        fontWeight: FontWeight.w700),
+                  ),
+                  heightSpacer(30),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Expanded(
+                        child: Container(
+                          padding: const EdgeInsets.all(10),
+                          decoration: ShapeDecoration(
+                            shape: RoundedRectangleBorder(
+                              side: const BorderSide(
+                                  width: 1, color: Color(0xFF2E8B57)),
+                              borderRadius: BorderRadius.circular(14),
+                            ),
+                          ),
+                          child: Text(
+                            'Room No - ${userData['roomNumber'] ?? ''}',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                color: const Color(0xFF333333),
+                                fontSize: 17.sp),
+                          ),
+                        ),
+                      ),
+                      widthSpacer(30),
+                      Expanded(
+                        child: Container(
+                          padding: const EdgeInsets.all(10),
+                          decoration: ShapeDecoration(
+                            shape: RoundedRectangleBorder(
+                              side: const BorderSide(
+                                  width: 1, color: Color(0xFF2E8B57)),
+                              borderRadius: BorderRadius.circular(14),
+                            ),
+                          ),
+                          child: Text(
+                            'Block No - ${userData['block'] ?? ''}',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                color: const Color(0xFF333333),
+                                fontSize: 17.sp),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  heightSpacer(20),
+                  Container(
+                    padding: const EdgeInsets.all(12),
+                    decoration: ShapeDecoration(
+                      shape: RoundedRectangleBorder(
+                        side: const BorderSide(
+                            width: 1, color: Color(0xFF2E8B57)),
+                        borderRadius: BorderRadius.circular(14),
+                      ),
+                    ),
+                    child: Text(
+                      userData['emailId'] ?? '',
+                      style: TextStyle(
+                          color: AppColors.kSecondaryColor, fontSize: 17.sp),
+                    ),
+                  ),
+                  heightSpacer(20),
+                  CustomTextField(
+                    controller: username,
+                    inputHint: 'Username',
+                    prefixIcon: const Icon(Icons.person_2_outlined),
+                  ),
+                  heightSpacer(20),
+                  CustomTextField(
+                    controller: phoneNumber,
+                    inputHint: 'Phone Number',
+                    prefixIcon: const Icon(Icons.phone_outlined),
+                  ),
+                  heightSpacer(20),
+                  Row(
+                    children: [
+                      Expanded(
+                          child: CustomTextField(
+                              controller: firstName, inputHint: 'First Name')),
+                      widthSpacer(20),
+                      Expanded(
+                          child: CustomTextField(
+                              controller: lastName, inputHint: 'Last Name')),
+                    ],
+                  ),
+                  heightSpacer(40),
+                  CustomButton(
+                    press: updateProfile,
+                    buttonText: 'Save',
+                  )
                 ],
               ),
-              heightSpacer(40),
-              CustomButton(
-                press: updateProfile,
-                buttonText: 'Save',
-              )
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

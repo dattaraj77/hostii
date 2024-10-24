@@ -47,8 +47,10 @@ class UserHomeScreen extends StatelessWidget {
             },
             child: Padding(
               padding: EdgeInsets.only(right: 15.w),
-              child: const CircleAvatar(
-                backgroundImage: AssetImage(AppConstants.profile),
+              child: Icon(
+                Icons.account_circle,
+                color: Colors.white,
+                size: 30.sp,
               ),
             ),
           ),

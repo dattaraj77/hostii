@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:goku/common/app_bar.dart';
+import 'package:goku/common/constants.dart';
 import 'package:goku/common/spacing.dart';
+import 'package:goku/theme/colors.dart';
+import 'package:goku/features/student/screens/change_room_screen.dart';
 
 class RoomAvailabilityScreen extends StatelessWidget {
   const RoomAvailabilityScreen({super.key});
@@ -35,41 +38,78 @@ class RoomCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      margin: EdgeInsets.symmetric(vertical: 10.h, horizontal: 15.w),
-      child: Padding(
-        padding: EdgeInsets.all(15.w),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Room Number: ${room['number']}',
-              style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold),
+    bool isAvailable = room['currentOccupancy'] < room['capacity'];
+
+    return Container(
+      margin: EdgeInsets.symmetric(vertical: 8.h),
+      padding: EdgeInsets.all(16.w),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12.r),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.3),
+            spreadRadius: 1,
+            blurRadius: 5,
+            offset: const Offset(0, 3),
+          ),
+        ],
+      ),
+      child: Row(
+        children: [
+          Image.asset(
+            AppConstants.bed,
+            width: 50.w,
+            height: 50.h,
+          ),
+          SizedBox(width: 16.w),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Room ${room['number']}',
+                  style: TextStyle(
+                    fontSize: 18.sp,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                SizedBox(height: 4.h),
+                Text('Block: ${room['block']}'),
+                SizedBox(height: 4.h),
+                Text('Capacity: ${room['capacity']}'),
+                SizedBox(height: 4.h),
+                Text('Occupied: ${room['currentOccupancy']}'),
+              ],
             ),
-            heightSpacer(5),
-            Text('Block: ${room['block']}'),
-            heightSpacer(5),
-            Text('Capacity: ${room['capacity']}'),
-            heightSpacer(5),
-            Text('Current Occupancy: ${room['currentOccupancy']}'),
-            heightSpacer(10),
-            Align(
-              alignment: Alignment.centerRight,
-              child: ElevatedButton(
-                onPressed: room['currentOccupancy'] < room['capacity']
-                    ? () {
-                        // Handle room booking or details
-                      }
-                    : null,
-                child: Text(
-                  room['currentOccupancy'] < room['capacity']
-                      ? 'Available'
-                      : 'Unavailable',
+          ),
+          GestureDetector(
+            onTap: isAvailable
+                ? () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ChangeRoomScreen(),
+                      ),
+                    );
+                  }
+                : null,
+            child: Container(
+              padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
+              decoration: BoxDecoration(
+                color: isAvailable ? Colors.green : Colors.red,
+                borderRadius: BorderRadius.circular(12.r),
+              ),
+              child: Text(
+                isAvailable ? 'Available' : 'Full',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

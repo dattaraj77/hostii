@@ -51,6 +51,7 @@ class _IssueScreenState extends State<IssueScreen> {
             jobRole: null,
           ),
         ),
+        // Add more mock issues here if needed
       ],
       error: null,
     );
@@ -81,7 +82,18 @@ class _IssueScreenState extends State<IssueScreen> {
                       final issue = issues[index];
                       return Padding(
                         padding: const EdgeInsets.all(10.0),
-                        child: IssueCard(issue: issue),
+                        child: GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    IssueDetailScreen(issue: issue),
+                              ),
+                            );
+                          },
+                          child: IssueCard(issue: issue),
+                        ),
                       );
                     },
                   );
@@ -225,6 +237,48 @@ class IssueCard extends StatelessWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class IssueDetailScreen extends StatelessWidget {
+  final Result issue;
+
+  const IssueDetailScreen({super.key, required this.issue});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: buildAppBar(context, 'Issue Details'),
+      body: SingleChildScrollView(
+        padding: EdgeInsets.all(16.w),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('Issue: ${issue.issue}',
+                style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold)),
+            heightSpacer(16),
+            Text(
+                'Student: ${issue.studentDetails.firstName} ${issue.studentDetails.lastName}'),
+            Text('Email: ${issue.studentEmailId}'),
+            Text('Room Number: ${issue.roomDetails.roomNumber}'),
+            Text('Block: ${issue.roomDetails.blockId.blockName}'),
+            heightSpacer(16),
+            Text('Student Comment: ${issue.studentComment}'),
+            heightSpacer(16),
+            ElevatedButton(
+              onPressed: () {
+                // Implement resolve functionality
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Issue Resolved')),
+                );
+                Navigator.pop(context);
+              },
+              child: Text('Resolve Issue'),
+            ),
+          ],
+        ),
       ),
     );
   }
