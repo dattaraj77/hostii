@@ -72,7 +72,7 @@ class _CreateStaffScreenState extends State<CreateStaffScreen> {
               Center(
                 child: ElevatedButton(
                   onPressed: _handleSubmit,
-                  child: Text('Create Staff'),
+                  child: const Text('Create Staff'),
                 ),
               ),
             ],

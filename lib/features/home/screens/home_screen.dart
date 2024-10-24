@@ -88,7 +88,7 @@ class _HomeScreenState extends State<HomeScreen> {
             },
             child: Padding(
               padding: EdgeInsets.only(right: 15.w),
-              child: CircleAvatar(
+              child: const CircleAvatar(
                 backgroundImage: AssetImage(AppConstants.profile),
               ),
             ),
@@ -129,7 +129,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       ],
                     ),
                     IconButton(
-                      icon: Icon(Icons.create, color: AppColors.kGreenColor),
+                      icon: const Icon(Icons.create,
+                          color: AppColors.kGreenColor),
                       onPressed: () {
                         Navigator.pushNamed(context, '/raise_issue');
                       },
@@ -149,7 +150,7 @@ class _HomeScreenState extends State<HomeScreen> {
               GridView.count(
                 crossAxisCount: 3,
                 shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
+                physics: const NeverScrollableScrollPhysics(),
                 mainAxisSpacing: 10.h, // Add vertical spacing
                 crossAxisSpacing: 10.w, // Add horizontal spacing
                 children: [
@@ -160,7 +161,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => RoomAvailabilityScreen(),
+                          builder: (context) => const RoomAvailabilityScreen(),
                         ),
                       );
                     },
@@ -203,7 +204,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => HostelFee(
+                          builder: (context) => const HostelFee(
                             blockNumber: 'A1', // Dummy value
                             roomNumber: '101', // Dummy value
                             maintenanceCharge: '50', // Dummy value

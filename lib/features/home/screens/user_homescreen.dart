@@ -47,7 +47,7 @@ class UserHomeScreen extends StatelessWidget {
             },
             child: Padding(
               padding: EdgeInsets.only(right: 15.w),
-              child: CircleAvatar(
+              child: const CircleAvatar(
                 backgroundImage: AssetImage(AppConstants.profile),
               ),
             ),
@@ -158,7 +158,7 @@ class UserHomeScreen extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => HostelFee(
+                          builder: (context) => const HostelFee(
                             blockNumber: 'B',
                             roomNumber: '201',
                             maintenanceCharge: '50',

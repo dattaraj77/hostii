@@ -1,15 +1,7 @@
-import 'dart:convert';
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:goku/api_services/api_provider.dart';
-import 'package:goku/api_services/api_utils.dart';
 import 'package:goku/common/app_bar.dart';
-import 'package:goku/common/constants.dart';
 import 'package:goku/common/spacing.dart';
-import 'package:goku/features/student/screens/change_room_screen.dart';
-import 'package:goku/models/room_availability_model.dart';
 
 class RoomAvailabilityScreen extends StatelessWidget {
   const RoomAvailabilityScreen({super.key});

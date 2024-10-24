@@ -53,7 +53,7 @@ class HostelFee extends StatelessWidget {
                     BoxShadow(
                       color: Colors.grey.withOpacity(0.3),
                       blurRadius: 10,
-                      offset: Offset(0, 5),
+                      offset: const Offset(0, 5),
                     ),
                   ],
                 ),
@@ -89,7 +89,7 @@ class HostelFee extends StatelessWidget {
                       _buildDetailRow('Water charge', '\$ $waterCharge'),
                       _buildDetailRow('Room charge', '\$ $roomCharge'),
                       heightSpacer(20),
-                      Divider(color: Colors.grey),
+                      const Divider(color: Colors.grey),
                       heightSpacer(20),
                       _buildDetailRow('Total Amount', '\$ $totalCharge'),
                       heightSpacer(30),
