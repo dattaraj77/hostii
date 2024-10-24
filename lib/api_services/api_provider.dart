@@ -1,95 +1,48 @@
 import 'dart:async';
-import 'dart:convert';
-import 'dart:developer';
+
 import 'package:flutter/foundation.dart';
 // ignore: depend_on_referenced_packages
-import 'package:http/http.dart' as http;
 
 class ApiProvider extends ChangeNotifier {
+  // Mock base URL and HTTP client
   final String baseUrl;
-  final http.Client httpClient;
-  late Future<String?> authToken;
+  // final http.Client httpClient; // Commented out as it's not needed for frontend-only
 
   ApiProvider({
     required this.baseUrl,
-    required this.httpClient,
+    // required this.httpClient, // Commented out as it's not needed for frontend-only
   });
 
-  Future<http.Response> getRequest(String endpoint,
-      {Map<String, String>? headers}) async {
-    final Uri uri = Uri.parse('$baseUrl$endpoint');
-    final Map<String, String> headers = {
-      'Content-Type': 'application/json'
-      // 'Authorization': 'Bearer $token',
-    };
-
-    print("$baseUrl$endpoint");
-
-    final response = await httpClient.get(uri, headers: headers);
-
-    print(response.body);
-
-    return response;
+  // Mock method to simulate a GET request
+  Future<void> getRequest(String endpoint) async {
+    // Simulate a delay
+    await Future.delayed(const Duration(seconds: 1));
+    // Mock response
+    print("GET request to $baseUrl$endpoint - Mock response");
   }
 
-  Future<http.Response> postRequest(
-    String endpoint, {
-    Map<String, String>? headers,
-    Map<String, dynamic>? body,
-    bool includeBearerToken = false,
-  }) async {
-    final Uri uri = Uri.parse('$baseUrl$endpoint');
-    final Map<String, String> headers = {
-      'Content-Type': 'application/json',
-    };
-
-    print("$baseUrl$endpoint");
-
-    final String jsonBody = body != null ? json.encode(body) : '';
-
-    final response =
-        await httpClient.post(uri, headers: headers, body: jsonBody);
-    log("requesttt ${response.headers.toString()}");
-
-    return response;
+  // Mock method to simulate a POST request
+  Future<void> postRequest(String endpoint,
+      {Map<String, dynamic>? body}) async {
+    // Simulate a delay
+    await Future.delayed(const Duration(seconds: 1));
+    // Mock response
+    print("POST request to $baseUrl$endpoint with body $body - Mock response");
   }
 
-  Future<http.Response> putRequest(
-    String endpoint, {
-    Map<String, String>? headers,
-    Map<String, dynamic>? body,
-    bool includeBearerToken = false,
-  }) async {
-    final Uri uri = Uri.parse('$baseUrl$endpoint');
-    final Map<String, String> headers = {
-      'Content-Type': 'application/json',
-    };
-
-    print("$baseUrl$endpoint");
-
-    final String jsonBody = body != null ? json.encode(body) : '';
-
-    final response =
-        await httpClient.put(uri, headers: headers, body: jsonBody);
-    log("requesttt ${response.headers.toString()}");
-
-    return response;
+  // Mock method to simulate a PUT request
+  Future<void> putRequest(String endpoint, {Map<String, dynamic>? body}) async {
+    // Simulate a delay
+    await Future.delayed(const Duration(seconds: 1));
+    // Mock response
+    print("PUT request to $baseUrl$endpoint with body $body - Mock response");
   }
 
-  Future<http.Response> deleteRequest(
-    String endpoint, {
-    Map<String, String>? headers,
-    bool includeBearerToken = false,
-  }) async {
-    final Uri uri = Uri.parse('$baseUrl$endpoint');
-    final Map<String, String> headers = {
-      'Content-Type': 'application/json',
-    };
-
-    final response = await httpClient.delete(uri, headers: headers);
-
-    print(response.body);
-
-    return response;
+  // Mock method to simulate a DELETE request
+  Future<void> deleteRequest(String endpoint) async {
+    // Simulate a delay
+    await Future.delayed(const Duration(seconds: 1));
+    // Mock response
+    print("DELETE request to $baseUrl$endpoint - Mock response");
   }
 }

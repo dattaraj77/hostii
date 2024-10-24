@@ -1,29 +1,35 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:goku/common/spacing.dart';
+import 'package:goku/features/auth/screens/register_screen.dart';
 import 'package:goku/features/auth/widgets/custom_button.dart';
 import 'package:goku/features/auth/widgets/custom_text_field.dart';
 import 'package:goku/features/home/screens/home_screen.dart';
+import 'package:goku/features/home/screens/user_homescreen.dart';
+import 'package:goku/theme/colors.dart';
 import 'package:goku/theme/text_theme.dart';
 
 class LoginScreen extends StatelessWidget {
-  const LoginScreen({super.key});
+  final String userType;
+
+  const LoginScreen({super.key, required this.userType});
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: Colors.white,
-      body: Center(child: LoginBody()),
+      body: Center(child: LoginBody(userType: userType)),
     );
   }
 }
 
 class LoginBody extends StatefulWidget {
+  final String userType;
+
   const LoginBody({
     super.key,
+    required this.userType,
   });
 
   @override
@@ -37,34 +43,23 @@ class _LoginBodyState extends State<LoginBody> {
 
   Future<void> handleLogin() async {
     if (_formKey.currentState!.validate()) {
-      try {
-        UserCredential userCredential =
-            await FirebaseAuth.instance.signInWithEmailAndPassword(
-          email: email.text,
-          password: password.text,
-        );
-
-        // Fetch user data from Firestore
-        final userDoc = await FirebaseFirestore.instance
-            .collection('users')
-            .doc(userCredential.user!.uid)
-            .get();
-        final userData = userDoc.data();
-
-        // Navigate to home screen
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => const HomeScreen()),
-        );
-      } on FirebaseAuthException catch (e) {
-        String errorMessage = 'An error occurred. Please try again.';
-        if (e.code == 'user-not-found') {
-          errorMessage = 'No user found for that email.';
-        } else if (e.code == 'wrong-password') {
-          errorMessage = 'Wrong password provided for that user.';
+      // Mock login action
+      if (email.text == "test@example.com" && password.text == "password") {
+        // Navigate to the appropriate home screen
+        if (widget.userType == 'admin') {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => const HomeScreen()),
+          );
+        } else {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => const UserHomeScreen()),
+          );
         }
+      } else {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(errorMessage)),
+          const SnackBar(content: Text('Invalid email or password.')),
         );
       }
     }
@@ -80,6 +75,14 @@ class _LoginBodyState extends State<LoginBody> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              // Add your image here
+              Center(
+                child: Image.asset(
+                  'images/hostii.png', // Replace with your image path
+                  height: 100.h, // Adjust the height as needed
+                ),
+              ),
+              heightSpacer(20), // Add some space after the image
               Text('Email', style: AppTextTheme.kLabelStyle),
               CustomTextField(
                 controller: email,
@@ -108,6 +111,26 @@ class _LoginBodyState extends State<LoginBody> {
               CustomButton(
                 buttonText: "Login",
                 press: handleLogin,
+              ),
+              heightSpacer(20),
+              Center(
+                child: TextButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const RegisterScreen(),
+                      ),
+                    );
+                  },
+                  child: Text(
+                    "Don't have an account? Register",
+                    style: TextStyle(
+                      fontSize: 16.sp,
+                      color: AppColors.kGreenColor,
+                    ),
+                  ),
+                ),
               ),
             ],
           ),

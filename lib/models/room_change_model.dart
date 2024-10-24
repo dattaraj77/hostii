@@ -36,24 +36,26 @@ class RoomChangeModel {
 }
 
 class Result {
-  int currentRoomNumber;
-  int toChangeRoomNumber;
-  String currentBlock;
-  String toChangeBlock;
-  String changeReason;
-  int roomChangeRequestId;
-  dynamic status;
-  StudentDetails studentDetails;
+  final String status;
+  final int roomChangeRequestId;
+  final int currentRoomNumber;
+  final int toChangeRoomNumber;
+  final String currentBlock;
+  final String toChangeBlock;
+  final String changeReason;
+  final StudentDetails studentDetails;
+  final String studentEmailId;
 
   Result({
+    required this.status,
+    required this.roomChangeRequestId,
     required this.currentRoomNumber,
     required this.toChangeRoomNumber,
     required this.currentBlock,
     required this.toChangeBlock,
     required this.changeReason,
-    required this.roomChangeRequestId,
-    required this.status,
     required this.studentDetails,
+    required this.studentEmailId,
   });
 
   factory Result.fromRawJson(String str) => Result.fromJson(json.decode(str));
@@ -61,25 +63,27 @@ class Result {
   String toRawJson() => json.encode(toJson());
 
   factory Result.fromJson(Map<String, dynamic> json) => Result(
+        status: json["status"],
+        roomChangeRequestId: json["roomChangeRequestId"],
         currentRoomNumber: json["currentRoomNumber"],
         toChangeRoomNumber: json["toChangeRoomNumber"],
         currentBlock: json["currentBlock"],
         toChangeBlock: json["toChangeBlock"],
         changeReason: json["changeReason"],
-        roomChangeRequestId: json["roomChangeRequestId"],
-        status: json["status"],
         studentDetails: StudentDetails.fromJson(json["studentDetails"]),
+        studentEmailId: json["studentEmailId"],
       );
 
   Map<String, dynamic> toJson() => {
+        "status": status,
+        "roomChangeRequestId": roomChangeRequestId,
         "currentRoomNumber": currentRoomNumber,
         "toChangeRoomNumber": toChangeRoomNumber,
         "currentBlock": currentBlock,
         "toChangeBlock": toChangeBlock,
         "changeReason": changeReason,
-        "roomChangeRequestId": roomChangeRequestId,
-        "status": status,
         "studentDetails": studentDetails.toJson(),
+        "studentEmailId": studentEmailId,
       };
 }
 

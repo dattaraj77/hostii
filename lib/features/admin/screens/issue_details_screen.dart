@@ -1,15 +1,9 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:goku/api_services/api_calls.dart';
-import 'package:goku/api_services/api_provider.dart';
-import 'package:goku/api_services/api_utils.dart';
 import 'package:goku/common/app_bar.dart';
 import 'package:goku/common/constants.dart';
 import 'package:goku/common/spacing.dart';
 import 'package:goku/models/issue_model.dart';
-import 'package:provider/provider.dart';
 
 class IssueScreen extends StatefulWidget {
   const IssueScreen({super.key});
@@ -22,20 +16,44 @@ class _IssueScreenState extends State<IssueScreen> {
   IssueModel? issueModel;
 
   Future<void> fetchIssues() async {
-    try {
-      final apiProvider = Provider.of<ApiProvider>(context, listen: false);
-
-      final issueResponse = await apiProvider.getRequest(ApiUrls.allIssues);
-
-      if (issueResponse.statusCode == 200) {
-        final Map<String, dynamic> data = json.decode(issueResponse.body);
-        issueModel = IssueModel.fromJson(data);
-      } else {
-        throw Exception('Failed to fetch issues');
-      }
-    } catch (e) {
-      throw Exception('Error: $e');
-    }
+    // Mock data
+    issueModel = IssueModel(
+      status: 'success',
+      statusCode: 200,
+      result: [
+        Result(
+          issueId: 1,
+          roomDetails: RoomDetails(
+            roomNumber: 101,
+            roomCapacity: 2,
+            roomCurrentCapacity: 1,
+            roomType: RoomType(roomId: 1, roomType: 'Single'),
+            roomStatus: 'Available',
+            blockId: BlockId(
+              blockId: 1,
+              block: 'A',
+              blockName: 'Block A',
+              blockOwner: 'Owner A',
+            ),
+          ),
+          issue: 'Leaking faucet',
+          studentComment: 'Needs urgent repair',
+          studentEmailId: 'student@example.com',
+          staffComment: null,
+          studentDetails: StudentDetails(
+            userName: 'student1',
+            emailId: 'student@example.com',
+            firstName: 'Student',
+            lastName: 'One',
+            phoneNumber: 1234567890,
+            roleId: 2,
+            password: null,
+            jobRole: null,
+          ),
+        ),
+      ],
+      error: null,
+    );
   }
 
   @override
@@ -81,7 +99,6 @@ class IssueCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    ApiCall apiCall = ApiCall();
     return Container(
       width: double.maxFinite,
       decoration: const ShapeDecoration(
@@ -144,17 +161,13 @@ class IssueCard extends StatelessWidget {
                       ),
                     ),
                     heightSpacer(8.0),
+                    Text('Issue: ${issue.issue}'),
+                    heightSpacer(8.0),
+                    Text('Student Comment: ${issue.studentComment}'),
+                    heightSpacer(8.0),
                     Text('Room Number: ${issue.roomDetails.roomNumber}'),
                     heightSpacer(8.0),
-                    SizedBox(
-                      width: 160.w,
-                      child: Text(
-                        'Email Id: ${issue.studentDetails.emailId}',
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ),
-                    heightSpacer(8.0),
-                    Text('Phone No.: ${issue.studentDetails.phoneNumber}'),
+                    Text('Block: ${issue.roomDetails.blockId.blockName}'),
                   ],
                 ),
               ],
@@ -162,206 +175,52 @@ class IssueCard extends StatelessWidget {
           ),
           Container(
             width: double.maxFinite,
-            height: 160.h,
-            padding: const EdgeInsets.symmetric(vertical: 10),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
+            height: 40.h,
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                Expanded(
+                InkWell(
+                  onTap: () {
+                    // Mock action
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('Issue Resolved'),
+                      ),
+                    );
+                  },
                   child: Container(
-                    width: double.maxFinite,
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                    width: 120.w,
+                    padding: const EdgeInsets.all(8),
+                    decoration: ShapeDecoration(
+                      color: Colors.blue,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8)),
+                      shadows: const [
+                        BoxShadow(
+                          color: Color(0x3F000000),
+                          blurRadius: 8,
+                          offset: Offset(1, 3),
+                          spreadRadius: 0,
+                        )
+                      ],
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                const Text(
-                                  'Issue :',
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    color: Color(0xFF333333),
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w700,
-                                  ),
-                                ),
-                                const SizedBox(width: 12),
-                                Text(
-                                  issue.issue,
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    color: const Color(0xFF333333),
-                                    fontSize: 16.sp,
-                                    fontFamily: 'Inter',
-                                  ),
-                                ),
-                              ],
-                            ),
-                            heightSpacer(12),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'Student comment :',
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    color: const Color(0xFF333333),
-                                    fontSize: 16.sp,
-                                    fontWeight: FontWeight.w700,
-                                  ),
-                                ),
-                                heightSpacer(12),
-                                Text(
-                                  '“${issue.studentComment}”',
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    color: const Color(0xFF333333),
-                                    fontSize: 16.sp,
-                                    fontFamily: 'Inter',
-                                  ),
-                                ),
-                              ],
-                            ),
-                            heightSpacer(20),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                InkWell(
-                                  onTap: () {
-                                    apiCall.closeAnIssue(
-                                      issue.issueId.toString(),
-                                      'Considered',
-                                      context,
-                                    );
-                                  },
-                                  child: Container(
-                                    width: 120.w,
-                                    padding: const EdgeInsets.all(8),
-                                    decoration: ShapeDecoration(
-                                      color: Colors.blue,
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(8)),
-                                      shadows: const [
-                                        BoxShadow(
-                                          color: Color(0x3F000000),
-                                          blurRadius: 8,
-                                          offset: Offset(1, 3),
-                                          spreadRadius: 0,
-                                        )
-                                      ],
-                                    ),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Text(
-                                          'Resolve',
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 16.sp,
-                                            fontWeight: FontWeight.w700,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            heightSpacer(10),
-                          ],
+                        Text(
+                          'Resolve',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 16.sp,
+                            fontWeight: FontWeight.w700,
+                          ),
                         ),
                       ],
                     ),
                   ),
                 ),
-
-                // Container(
-                //   width: double.maxFinite,
-                //   height: 40.h,
-                //   padding: const EdgeInsets.symmetric(horizontal: 16),
-                //   child: Row(
-                //     children: [
-                //       Expanded(
-                //         child: Container(
-                //           height: double.infinity,
-                //           padding: const EdgeInsets.all(4),
-                //           decoration: ShapeDecoration(
-                //             color: const Color(0xFF2ECC71),
-                //             shape: RoundedRectangleBorder(
-                //                 borderRadius: BorderRadius.circular(8)),
-                //             shadows: const [
-                //               BoxShadow(
-                //                 color: Color(0x3F000000),
-                //                 blurRadius: 8,
-                //                 offset: Offset(1, 3),
-                //                 spreadRadius: 0,
-                //               )
-                //             ],
-                //           ),
-                //           child: Row(
-                //             mainAxisAlignment: MainAxisAlignment.center,
-                //             children: [
-                //               Text(
-                //                 'Accept ',
-                //                 style: TextStyle(
-                //                   color: Colors.white,
-                //                   fontSize: 16.sp,
-                //                   fontWeight: FontWeight.w700,
-                //                 ),
-                //               ),
-                //             ],
-                //           ),
-                //         ),
-                //       ),
-                //       const SizedBox(width: 32),
-                //       Expanded(
-                //         child: Container(
-                //           height: double.infinity,
-                //           padding: const EdgeInsets.all(4),
-                //           decoration: ShapeDecoration(
-                //             color: const Color(0xFFED6A77),
-                //             shape: RoundedRectangleBorder(
-                //                 borderRadius: BorderRadius.circular(8)),
-                //             shadows: const [
-                //               BoxShadow(
-                //                 color: Color(0x3F000000),
-                //                 blurRadius: 8,
-                //                 offset: Offset(1, 3),
-                //                 spreadRadius: 0,
-                //               )
-                //             ],
-                //           ),
-                //           child: Row(
-                //             mainAxisAlignment: MainAxisAlignment.center,
-                //             children: [
-                //               Text(
-                //                 'Reject',
-                //                 textAlign: TextAlign.center,
-                //                 style: TextStyle(
-                //                   color: Colors.white,
-                //                   fontSize: 16.sp,
-                //                   fontWeight: FontWeight.w700,
-                //                 ),
-                //               ),
-                //             ],
-                //           ),
-                //         ),
-                //       ),
-                //     ],
-                //   ),
-                // ),
               ],
             ),
           ),

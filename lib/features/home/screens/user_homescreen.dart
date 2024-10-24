@@ -1,68 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:goku/common/constants.dart';
 import 'package:goku/common/spacing.dart';
 import 'package:goku/features/admin/screens/issue_details_screen.dart';
-import 'package:goku/features/admin/screens/staff_display_screen.dart';
-import 'package:goku/features/student/screens/hostel_fees.dart';
 import 'package:goku/features/student/screens/profile_screen.dart';
-import 'package:goku/features/admin/screens/room_change_requests_screen.dart';
+import 'package:goku/features/student/screens/hostel_fees.dart';
+import 'package:goku/features/student/screens/raise_issue_screen.dart';
+import 'package:goku/features/student/screens/room_availability.dart';
 import 'package:goku/theme/colors.dart';
 import 'package:goku/theme/text_theme.dart';
 import 'package:goku/widgets/category_card.dart';
-import 'package:goku/features/student/screens/room_availability.dart';
 
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
-
-  @override
-  State<HomeScreen> createState() => _HomeScreenState();
-}
-
-class _HomeScreenState extends State<HomeScreen> {
-  int _selectedIndex = 0;
-
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-    // Navigate to different screens based on the selected index
-    switch (index) {
-      case 0:
-        // Current screen
-        break;
-      case 1:
-        break;
-      case 2:
-        Navigator.pushNamed(context, '/raise_issue');
-        break;
-      case 3:
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const RoomChangeRequestScreen(),
-          ),
-        );
-        break;
-      case 4:
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const ProfileScreen(),
-          ),
-        );
-        break;
-    }
-  }
+class UserHomeScreen extends StatelessWidget {
+  const UserHomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     // Mock user data
     final userData = {
-      'firstName': 'Admin',
-      'office': 'W1',
-      'block': 'A',
+      'firstName': 'Goraksh Naik',
+      'roomNumber': '201',
+      'block': 'B',
     };
 
     return Scaffold(
@@ -71,9 +29,10 @@ class _HomeScreenState extends State<HomeScreen> {
         title: Text(
           "Dashboard",
           style: AppTextTheme.kLabelStyle.copyWith(
-              fontSize: 22.sp,
-              fontWeight: FontWeight.bold,
-              color: Colors.white),
+            fontSize: 22.sp,
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+          ),
         ),
         backgroundColor: AppColors.kGreenColor,
         actions: [
@@ -118,18 +77,19 @@ class _HomeScreenState extends State<HomeScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          '${userData['firstName']}',
+                          userData['firstName'] ?? 'Unknown',
                           style: TextStyle(
                             fontSize: 18.sp,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        Text('Office: ${userData['office']}'),
-                        Text('Block: ${userData['block']}'),
+                        Text('Room no: ${userData['roomNumber'] ?? 'N/A'}'),
+                        Text('Block no: ${userData['block'] ?? 'N/A'}'),
                       ],
                     ),
                     IconButton(
-                      icon: Icon(Icons.create, color: AppColors.kGreenColor),
+                      icon: const Icon(Icons.create,
+                          color: AppColors.kGreenColor),
                       onPressed: () {
                         Navigator.pushNamed(context, '/raise_issue');
                       },
@@ -149,9 +109,9 @@ class _HomeScreenState extends State<HomeScreen> {
               GridView.count(
                 crossAxisCount: 3,
                 shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
-                mainAxisSpacing: 10.h, // Add vertical spacing
-                crossAxisSpacing: 10.w, // Add horizontal spacing
+                physics: const NeverScrollableScrollPhysics(),
+                mainAxisSpacing: 10.h,
+                crossAxisSpacing: 10.w,
                 children: [
                   CategoryCard(
                     category: 'Room\nAvailability',
@@ -160,33 +120,28 @@ class _HomeScreenState extends State<HomeScreen> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => RoomAvailabilityScreen(),
+                          builder: (context) => const RoomAvailabilityScreen(),
                         ),
                       );
                     },
                   ),
                   CategoryCard(
-                    category: 'All\nIssues',
-                    image: AppConstants.raiseIssue,
+                    category: '\n create Issues',
+                    image: AppConstants.showAllIssues,
                     onTap: () {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => const StaffDisplayScreen(),
+                          builder: (context) => const RaiseIssueScreen(),
                         ),
                       );
                     },
                   ),
                   CategoryCard(
                     category: 'Staff\nMembers',
-                    image: AppConstants.staffMember,
+                    image: AppConstants.showStaff,
                     onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const StaffDisplayScreen(),
-                        ),
-                      );
+                      Navigator.pushNamed(context, '/show_staff');
                     },
                   ),
                   CategoryCard(
@@ -204,13 +159,13 @@ class _HomeScreenState extends State<HomeScreen> {
                         context,
                         MaterialPageRoute(
                           builder: (context) => HostelFee(
-                            blockNumber: 'A1', // Dummy value
-                            roomNumber: '101', // Dummy value
-                            maintenanceCharge: '50', // Dummy value
-                            parkingCharge: '20', // Dummy value
-                            waterCharge: '10', // Dummy value
-                            roomCharge: '200', // Dummy value
-                            totalCharge: '280', // Dummy value
+                            blockNumber: 'B',
+                            roomNumber: '201',
+                            maintenanceCharge: '50',
+                            parkingCharge: '20',
+                            waterCharge: '10',
+                            roomCharge: '200',
+                            totalCharge: '280',
                           ),
                         ),
                       );
@@ -218,14 +173,9 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   CategoryCard(
                     category: 'Change\nRequest',
-                    image: AppConstants.roomChange,
+                    image: AppConstants.changeRequest,
                     onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const RoomChangeRequestScreen(),
-                        ),
-                      );
+                      Navigator.pushNamed(context, '/change_request');
                     },
                   ),
                 ],
@@ -236,12 +186,4 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
-}
-
-class ChartData {
-  final String label;
-  final double value;
-  final Color color;
-
-  ChartData(this.label, this.value, this.color);
 }

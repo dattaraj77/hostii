@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:goku/api_services/api_utils.dart';
 import 'package:goku/common/app_bar.dart';
 import 'package:goku/common/constants.dart';
 import 'package:goku/common/spacing.dart';
 
 class HostelFee extends StatelessWidget {
-  String blockNumber;
-  String roomNumber;
-  String maintenanceCharge;
-  String parkingCharge;
-  String waterCharge;
-  String roomCharge;
-  String totalCharge;
-  HostelFee({
+  final String blockNumber;
+  final String roomNumber;
+  final String maintenanceCharge;
+  final String parkingCharge;
+  final String waterCharge;
+  final String roomCharge;
+  final String totalCharge;
+
+  const HostelFee({
     super.key,
     required this.blockNumber,
     required this.roomNumber,
@@ -41,207 +41,81 @@ class HostelFee extends StatelessWidget {
               heightSpacer(20),
               SvgPicture.asset(
                 AppConstants.hostel,
-                height: 200.h,
+                height: 150.h,
               ),
-              heightSpacer(40),
+              heightSpacer(30),
               Container(
                 width: double.maxFinite,
-                decoration: ShapeDecoration(
-                  color: const Color(0x4C2E8B57),
-                  shape: RoundedRectangleBorder(
-                    side: const BorderSide(
-                      width: 4,
-                      strokeAlign: BorderSide.strokeAlignOutside,
-                      color: Color(0xFF2E8B57),
-                    ),
-                    borderRadius: BorderRadius.circular(30),
-                  ),
-                  shadows: const [
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(20.r),
+                  boxShadow: [
                     BoxShadow(
-                      color: Color(0x332E8B57),
-                      blurRadius: 8,
-                      offset: Offset(1, 4),
-                      spreadRadius: 0,
-                    )
+                      color: Colors.grey.withOpacity(0.3),
+                      blurRadius: 10,
+                      offset: Offset(0, 5),
+                    ),
                   ],
                 ),
                 child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 10.w),
+                  padding: EdgeInsets.all(20.w),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      Text(
+                        'Hostel Details',
+                        style: TextStyle(
+                          color: Colors.black87,
+                          fontSize: 22.sp,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      heightSpacer(20),
+                      _buildDetailRow('Block no.', blockNumber),
+                      _buildDetailRow('Room no.', roomNumber),
                       heightSpacer(20),
                       Text(
-                        'Hostel details',
+                        'Payment Details',
                         style: TextStyle(
-                          color: const Color(0xFF333333),
-                          fontSize: 20.sp,
-                          fontWeight: FontWeight.w700,
+                          color: Colors.black87,
+                          fontSize: 22.sp,
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
                       heightSpacer(20),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Row(
-                            children: [
-                              Text(
-                                'Block no.',
-                                style: TextStyle(
-                                  color: const Color(0xFF464646),
-                                  fontSize: 16.sp,
-                                  fontWeight: FontWeight.w700,
-                                ),
-                              ),
-                              Text(
-                                '- $blockNumber',
-                                style: const TextStyle(
-                                  color: Color(0xFF464646),
-                                  fontSize: 16,
-                                ),
-                              ),
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              Text(
-                                'Room no.',
-                                style: TextStyle(
-                                  color: const Color(0xFF464646),
-                                  fontSize: 16.sp,
-                                  fontWeight: FontWeight.w700,
-                                ),
-                              ),
-                              Text(
-                                '- $roomNumber',
-                                style: const TextStyle(
-                                  color: Color(0xFF464646),
-                                  fontSize: 16,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
+                      _buildDetailRow(
+                          'Maintenance charge', '\$ $maintenanceCharge'),
+                      _buildDetailRow('Parking charge', '\$ $parkingCharge'),
+                      _buildDetailRow('Water charge', '\$ $waterCharge'),
+                      _buildDetailRow('Room charge', '\$ $roomCharge'),
                       heightSpacer(20),
-                      const Text(
-                        'Payment details ',
-                        style: TextStyle(
-                          color: Color(0xFF333333),
-                          fontSize: 20,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
+                      Divider(color: Colors.grey),
                       heightSpacer(20),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            'Maintenance charge - ',
-                            style: TextStyle(
-                              color: const Color(0xFF464646),
-                              fontSize: 16.sp,
-                              fontWeight: FontWeight.w700,
-                            ),
-                          ),
-                          Text(
-                            '\$ $maintenanceCharge',
-                            style: TextStyle(
-                              color: const Color(0xFF464646),
-                              fontSize: 16.sp,
-                            ),
-                          ),
-                        ],
-                      ),
-                      heightSpacer(20),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            'Parking charge - ',
-                            style: TextStyle(
-                              color: const Color(0xFF464646),
-                              fontSize: 16.sp,
-                              fontWeight: FontWeight.w700,
-                            ),
-                          ),
-                          Text(
-                            '\$ $parkingCharge',
-                            style: TextStyle(
-                              color: const Color(0xFF464646),
-                              fontSize: 16.sp,
-                            ),
-                          ),
-                        ],
-                      ),
-                      heightSpacer(20),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            'Room water charge - ',
-                            style: TextStyle(
-                              color: const Color(0xFF464646),
-                              fontSize: 16.sp,
-                              fontWeight: FontWeight.w700,
-                            ),
-                          ),
-                          Text(
-                            '\$ $waterCharge',
-                            style: TextStyle(
-                              color: const Color(0xFF464646),
-                              fontSize: 16.sp,
-                            ),
-                          ),
-                        ],
-                      ),
-                      heightSpacer(20),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            'Room charge - ',
-                            style: TextStyle(
-                              color: const Color(0xFF464646),
-                              fontSize: 16.sp,
-                              fontWeight: FontWeight.w700,
-                            ),
-                          ),
-                          Text(
-                            '\$ $roomCharge',
-                            style: TextStyle(
-                              color: const Color(0xFF464646),
-                              fontSize: 16.sp,
-                            ),
-                          ),
-                        ],
-                      ),
-                      heightSpacer(20),
-                      const Divider(
-                        color: Colors.black,
-                      ),
-                      heightSpacer(20),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            'Total Amount - ',
-                            style: TextStyle(
-                              color: const Color(0xFF464646),
-                              fontSize: 16.sp,
-                              fontWeight: FontWeight.w700,
-                            ),
-                          ),
-                          Text(
-                            '\$ $totalCharge',
-                            style: TextStyle(
-                              color: const Color(0xFF464646),
-                              fontSize: 16.sp,
-                            ),
-                          ),
-                        ],
-                      ),
+                      _buildDetailRow('Total Amount', '\$ $totalCharge'),
                       heightSpacer(30),
+                      Center(
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.green,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30.r),
+                            ),
+                            padding: EdgeInsets.symmetric(
+                                vertical: 15.h, horizontal: 30.w),
+                          ),
+                          onPressed: () {
+                            // Add payment logic here
+                          },
+                          child: Text(
+                            'Proceed to Payment',
+                            style: TextStyle(
+                              fontSize: 18.sp,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      ),
+                      heightSpacer(20),
                     ],
                   ),
                 ),
@@ -250,6 +124,29 @@ class HostelFee extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildDetailRow(String label, String value) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          '$label - ',
+          style: TextStyle(
+            color: Colors.black54,
+            fontSize: 16.sp,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+        Text(
+          value,
+          style: TextStyle(
+            color: Colors.black54,
+            fontSize: 16.sp,
+          ),
+        ),
+      ],
     );
   }
 }

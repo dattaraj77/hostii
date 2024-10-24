@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:goku/common/app_bar.dart';
 import 'package:goku/common/spacing.dart';
 import 'package:goku/features/auth/widgets/custom_button.dart';
@@ -29,47 +27,28 @@ class _ChangeRoomScreenState extends State<ChangeRoomScreen> {
     fetchRoomsAndBlocks();
   }
 
-  Future<void> fetchRoomsAndBlocks() async {
-    // Fetch available rooms and blocks from Firestore
-    final roomsSnapshot =
-        await FirebaseFirestore.instance.collection('rooms').get();
-    final blocksSnapshot =
-        await FirebaseFirestore.instance.collection('blocks').get();
-
+  void fetchRoomsAndBlocks() {
+    // Mock data for rooms and blocks
     setState(() {
-      rooms = roomsSnapshot.docs.map((doc) => doc['number'] as String).toList();
-      blocks = blocksSnapshot.docs.map((doc) => doc['name'] as String).toList();
+      rooms = ['101', '102', '103'];
+      blocks = ['A', 'B', 'C'];
     });
   }
 
-  Future<void> roomChangeRequest() async {
+  void roomChangeRequest() {
     if (_formKey.currentState!.validate() &&
         selectedRoom != null &&
         selectedBlock != null) {
-      try {
-        final user = FirebaseAuth.instance.currentUser;
-        if (user != null) {
-          await FirebaseFirestore.instance
-              .collection('roomChangeRequests')
-              .add({
-            'userId': user.uid,
-            'toChangeRoom': selectedRoom,
-            'toChangeBlock': selectedBlock,
-            'reason': reason.text,
-            'status': 'pending',
-            'createdAt': FieldValue.serverTimestamp(),
-          });
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-                content: Text('Room change request submitted successfully')),
-          );
-          Navigator.pop(context);
-        }
-      } catch (e) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error submitting request: $e')),
-        );
-      }
+      // Mock room change request action
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+            content: Text('Room change request submitted successfully')),
+      );
+      Navigator.pop(context);
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please fill all fields')),
+      );
     }
   }
 

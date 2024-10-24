@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:goku/common/app_bar.dart';
 import 'package:goku/common/spacing.dart';
 import 'package:goku/features/auth/widgets/custom_button.dart';
@@ -29,47 +27,17 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   Future<void> registerUser() async {
     if (_formKey.currentState!.validate()) {
-      try {
-        // Create user with email and password
-        UserCredential userCredential =
-            await FirebaseAuth.instance.createUserWithEmailAndPassword(
-          email: email.text,
-          password: password.text,
+      // Mock registration action
+      if (email.text == "test@example.com") {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+              content: Text('The account already exists for that email.')),
         );
-
-        // Add user details to Firestore
-        await FirebaseFirestore.instance
-            .collection('users')
-            .doc(userCredential.user!.uid)
-            .set({
-          'username': username.text,
-          'firstName': firstName.text,
-          'lastName': lastName.text,
-          'email': email.text,
-          'phoneNumber': phoneNumber.text,
-          'block': block.text,
-          'roomNumber': roomNumber.text,
-          'role': 'student', // Assuming default role is student
-        });
-
+      } else {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Registration successful')),
         );
         Navigator.pop(context); // Go back to login screen
-      } on FirebaseAuthException catch (e) {
-        String errorMessage = 'An error occurred. Please try again.';
-        if (e.code == 'weak-password') {
-          errorMessage = 'The password provided is too weak.';
-        } else if (e.code == 'email-already-in-use') {
-          errorMessage = 'The account already exists for that email.';
-        }
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(errorMessage)),
-        );
-      } catch (e) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(e.toString())),
-        );
       }
     }
   }

@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:goku/common/constants.dart';
 import 'package:goku/common/spacing.dart';
 import 'package:goku/features/auth/screens/login_screen.dart';
@@ -24,53 +22,43 @@ class _ProfileScreenState extends State<ProfileScreen> {
   final TextEditingController firstName = TextEditingController();
   final TextEditingController lastName = TextEditingController();
 
-  Map<String, dynamic> userData = {};
+  Map<String, dynamic> userData = {
+    'userName': 'john_doe',
+    'phoneNumber': '1234567890',
+    'firstName': 'John',
+    'lastName': 'Doe',
+    'roomNumber': '101',
+    'block': 'A',
+    'emailId': 'john.doe@example.com',
+  };
 
   @override
   void initState() {
     super.initState();
-    fetchUserData();
+    loadUserData();
   }
 
-  Future<void> fetchUserData() async {
-    final user = FirebaseAuth.instance.currentUser;
-    if (user != null) {
-      final userDoc = await FirebaseFirestore.instance
-          .collection('users')
-          .doc(user.uid)
-          .get();
-      setState(() {
-        userData = userDoc.data() as Map<String, dynamic>;
-        username.text = userData['userName'] ?? '';
-        phoneNumber.text = userData['phoneNumber'] ?? '';
-        firstName.text = userData['firstName'] ?? '';
-        lastName.text = userData['lastName'] ?? '';
-      });
-    }
+  void loadUserData() {
+    // Mock user data loading
+    setState(() {
+      username.text = userData['userName'] ?? '';
+      phoneNumber.text = userData['phoneNumber'] ?? '';
+      firstName.text = userData['firstName'] ?? '';
+      lastName.text = userData['lastName'] ?? '';
+    });
   }
 
-  Future<void> updateProfile() async {
-    try {
-      final user = FirebaseAuth.instance.currentUser;
-      if (user != null) {
-        await FirebaseFirestore.instance
-            .collection('users')
-            .doc(user.uid)
-            .update({
-          'userName': username.text,
-          'firstName': firstName.text,
-          'lastName': lastName.text,
-          'phoneNumber': phoneNumber.text,
-        });
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Profile Updated Successfully')),
-        );
-      }
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error updating profile: $e')),
-      );
-    }
+  void updateProfile() {
+    // Mock profile update action
+    setState(() {
+      userData['userName'] = username.text;
+      userData['firstName'] = firstName.text;
+      userData['lastName'] = lastName.text;
+      userData['phoneNumber'] = phoneNumber.text;
+    });
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Profile Updated Successfully')),
+    );
   }
 
   @override
@@ -86,10 +74,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
         actions: [
           IconButton(
             icon: const Icon(Icons.logout, color: Colors.white),
-            onPressed: () async {
-              await FirebaseAuth.instance.signOut();
-              Navigator.pushReplacement(context,
-                  MaterialPageRoute(builder: (context) => const LoginScreen()));
+            onPressed: () {
+              // Mock logout action
+              Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const LoginScreen(
+                            userType: '',
+                          )));
             },
           )
         ],

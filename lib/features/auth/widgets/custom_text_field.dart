@@ -89,7 +89,6 @@ class CustomTextField extends StatelessWidget {
             inputTextStyle: AppTextTheme.kPrimaryStyle,
             inputHintStyle: hintStyle ?? AppTextTheme.khintStyle,
           ),
-          // AppSizing.h04
         ],
       ),
     );

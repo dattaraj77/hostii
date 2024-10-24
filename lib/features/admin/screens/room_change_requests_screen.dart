@@ -1,15 +1,8 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:goku/api_services/api_calls.dart';
-import 'package:goku/api_services/api_provider.dart';
-import 'package:goku/api_services/api_utils.dart';
 import 'package:goku/common/app_bar.dart';
-import 'package:goku/common/constants.dart';
 import 'package:goku/common/spacing.dart';
 import 'package:goku/models/room_change_model.dart';
-import 'package:provider/provider.dart';
 
 class RoomChangeRequestScreen extends StatefulWidget {
   const RoomChangeRequestScreen({super.key});
@@ -23,59 +16,70 @@ class _RoomChangeRequestScreenState extends State<RoomChangeRequestScreen> {
   RoomChangeModel? roomModel;
 
   Future<void> fetchRequests() async {
-    try {
-      final apiProvider = Provider.of<ApiProvider>(context, listen: false);
-
-      final requestResponse =
-          await apiProvider.getRequest(ApiUrls.roomChangeRequests);
-
-      if (requestResponse.statusCode == 200) {
-        final Map<String, dynamic> data = json.decode(requestResponse.body);
-        roomModel = RoomChangeModel.fromJson(data);
-      } else {
-        throw Exception('Failed to fetch requests');
-      }
-    } catch (e) {
-      throw Exception('Error: $e');
-    }
+    // Mock data
+    roomModel = RoomChangeModel(
+      status: 'success',
+      statusCode: 200,
+      result: [
+        Result(
+          status: 'pending',
+          roomChangeRequestId: 1,
+          currentRoomNumber: 101,
+          toChangeRoomNumber: 102,
+          currentBlock: 'A',
+          toChangeBlock: 'B',
+          changeReason: 'Need more space',
+          studentEmailId: 'student@example.com',
+          studentDetails: StudentDetails(
+            userName: 'student1',
+            emailId: 'student@example.com',
+            roomNumber: 101,
+            firstName: 'Student',
+            lastName: 'One',
+            phoneNumber: 1234567890,
+            roleId: 2,
+            password: null,
+            jobRole: null,
+            block: 'A',
+          ),
+        ),
+      ],
+      error: null,
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: buildAppBar(context, 'Room change requests'),
-      body: ApiUrls.roleId == 2 || ApiUrls.roleId == 3
-          ? const Center(
-              child: Text("You don't have permission to view this page"),
-            )
-          : FutureBuilder(
-              future: fetchRequests(),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(child: CircularProgressIndicator());
-                } else if (snapshot.hasError) {
-                  return Center(child: Text('Error: ${snapshot.error}'));
-                } else {
-                  final List<Result> room = roomModel!.result;
-                  return roomModel == null
-                      ? const Center(
-                          child: Text(
-                            "No change room requets found",
-                          ),
-                        )
-                      : ListView.builder(
-                          itemCount: room.length,
-                          itemBuilder: (context, index) {
-                            final request = room[index];
-                            return Padding(
-                              padding: const EdgeInsets.all(10.0),
-                              child: RoomCard(request: request),
-                            );
-                          },
-                        );
-                }
-              },
-            ),
+      body: FutureBuilder(
+        future: fetchRequests(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return Center(child: Text('Error: ${snapshot.error}'));
+          } else {
+            final List<Result> room = roomModel!.result;
+            return roomModel == null
+                ? const Center(
+                    child: Text(
+                      "No change room requests found",
+                    ),
+                  )
+                : ListView.builder(
+                    itemCount: room.length,
+                    itemBuilder: (context, index) {
+                      final request = room[index];
+                      return Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: RoomCard(request: request),
+                      );
+                    },
+                  );
+          }
+        },
+      ),
     );
   }
 }
@@ -87,7 +91,6 @@ class RoomCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    ApiCall apiCall = ApiCall();
     return Container(
       width: double.maxFinite,
       decoration: const ShapeDecoration(
@@ -119,7 +122,7 @@ class RoomCard extends StatelessWidget {
                   children: [
                     heightSpacer(20),
                     Image.asset(
-                      AppConstants.person,
+                      'assets/person.png', // Replace with your asset path
                       height: 70.h,
                       width: 70.w,
                     ),
@@ -154,15 +157,11 @@ class RoomCard extends StatelessWidget {
                     heightSpacer(8.0),
                     Text('Current Block: ${request.currentBlock}'),
                     heightSpacer(8.0),
-                    SizedBox(
-                      width: 160.w,
-                      child: Text(
-                        'Email Id: ${request.studentDetails.emailId}',
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ),
+                    Text('To Change Room: ${request.toChangeRoomNumber}'),
                     heightSpacer(8.0),
-                    Text('Phone No.: ${request.studentDetails.phoneNumber}'),
+                    Text('To Change Block: ${request.toChangeBlock}'),
+                    heightSpacer(8.0),
+                    Text('Reason: ${request.changeReason}'),
                   ],
                 ),
               ],
@@ -170,188 +169,94 @@ class RoomCard extends StatelessWidget {
           ),
           Container(
             width: double.maxFinite,
-            height: 160.h,
-            padding: const EdgeInsets.symmetric(vertical: 10),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
+            height: 40.h,
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Row(
               children: [
                 Expanded(
-                  child: Container(
-                    width: double.maxFinite,
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                const Text(
-                                  'Asked For :',
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    color: Color(0xFF333333),
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w700,
-                                  ),
-                                ),
-                                const SizedBox(width: 12),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      "Block : ${request.toChangeBlock}",
-                                      style: TextStyle(
-                                        color: Colors.pink,
-                                        fontSize: 16.sp,
-                                      ),
-                                    ),
-                                    widthSpacer(20),
-                                    Text(
-                                      "Room No : ${request.toChangeRoomNumber}",
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                        color: Colors.pink,
-                                        fontSize: 16.sp,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                            heightSpacer(12),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'Reason :  ',
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    color: const Color(0xFF333333),
-                                    fontSize: 16.sp,
-                                    fontWeight: FontWeight.w700,
-                                  ),
-                                ),
-                                heightSpacer(12),
-                                Text(
-                                  request.changeReason,
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    color: const Color(0xFF333333),
-                                    fontSize: 16.sp,
-                                    fontFamily: 'Inter',
-                                  ),
-                                ),
-                              ],
-                            ),
-                            heightSpacer(20),
-                          ],
+                  child: InkWell(
+                    onTap: () {
+                      // Mock action
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Request Rejected'),
                         ),
-                      ],
+                      );
+                    },
+                    child: Container(
+                      height: double.infinity,
+                      padding: const EdgeInsets.all(4),
+                      decoration: ShapeDecoration(
+                        color: const Color(0xFFED6A77),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8)),
+                        shadows: const [
+                          BoxShadow(
+                            color: Color(0x3F000000),
+                            blurRadius: 8,
+                            offset: Offset(1, 3),
+                            spreadRadius: 0,
+                          )
+                        ],
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            'Reject',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 16.sp,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
-                Container(
-                  width: double.maxFinite,
-                  height: 40.h,
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: InkWell(
-                          onTap: () {
-                            apiCall.approveOrRejectRequest(
-                              request.roomChangeRequestId as String,
-                              'REJECTED',
-                              'REJECTED',
-                              context,
-                            );
-                          },
-                          child: Container(
-                            height: double.infinity,
-                            padding: const EdgeInsets.all(4),
-                            decoration: ShapeDecoration(
-                              color: const Color(0xFFED6A77),
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(8)),
-                              shadows: const [
-                                BoxShadow(
-                                  color: Color(0x3F000000),
-                                  blurRadius: 8,
-                                  offset: Offset(1, 3),
-                                  spreadRadius: 0,
-                                )
-                              ],
-                            ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  'Reject',
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 16.sp,
-                                    fontWeight: FontWeight.w700,
-                                  ),
-                                ),
-                              ],
+                widthSpacer(32),
+                Expanded(
+                  child: InkWell(
+                    onTap: () {
+                      // Mock action
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Request Approved'),
+                        ),
+                      );
+                    },
+                    child: Container(
+                      height: double.infinity,
+                      padding: const EdgeInsets.all(4),
+                      decoration: ShapeDecoration(
+                        color: const Color(0xFF2ECC71),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8)),
+                        shadows: const [
+                          BoxShadow(
+                            color: Color(0x3F000000),
+                            blurRadius: 8,
+                            offset: Offset(1, 3),
+                            spreadRadius: 0,
+                          )
+                        ],
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            'Approve',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 16.sp,
+                              fontWeight: FontWeight.w700,
                             ),
                           ),
-                        ),
+                        ],
                       ),
-                      widthSpacer(32),
-                      Expanded(
-                        child: InkWell(
-                          onTap: () {
-                            apiCall.approveOrRejectRequest(
-                              request.roomChangeRequestId as String,
-                              'APPROVED',
-                              'APPROVED',
-                              context,
-                            );
-                          },
-                          child: Container(
-                            height: double.infinity,
-                            padding: const EdgeInsets.all(4),
-                            decoration: ShapeDecoration(
-                              color: const Color(0xFF2ECC71),
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(8)),
-                              shadows: const [
-                                BoxShadow(
-                                  color: Color(0x3F000000),
-                                  blurRadius: 8,
-                                  offset: Offset(1, 3),
-                                  spreadRadius: 0,
-                                )
-                              ],
-                            ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  'Approve ',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 16.sp,
-                                    fontWeight: FontWeight.w700,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
+                    ),
                   ),
                 ),
               ],

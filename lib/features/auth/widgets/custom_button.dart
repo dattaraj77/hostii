@@ -31,8 +31,9 @@ class CustomButton extends StatelessWidget {
           child: Text(
             buttonText ?? " ",
             style: AppTextTheme.kLabelStyle.copyWith(
-                color: buttonTextColor ?? AppColors.kLight,
-                fontSize: size ?? 16),
+              color: buttonTextColor ?? AppColors.kLight,
+              fontSize: size ?? 16,
+            ),
           ),
         ),
       ),

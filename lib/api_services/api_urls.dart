@@ -1,4 +1,5 @@
 class ApiUrls {
+  // Mock user-related data
   static String? email;
   static String? phoneNumber;
   static String? roomNumber;

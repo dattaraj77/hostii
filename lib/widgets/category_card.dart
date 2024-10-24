@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
 import 'package:goku/common/spacing.dart';
 
 class CategoryCard extends StatelessWidget {
-  String category;
-  String image;
-  VoidCallback onTap;
-  CategoryCard({
+  final String category;
+  final String image;
+  final VoidCallback onTap;
+
+  const CategoryCard({
     super.key,
     required this.category,
     required this.image,
@@ -19,7 +19,6 @@ class CategoryCard extends StatelessWidget {
     return InkWell(
       onTap: onTap,
       child: Container(
-        // width: 100.w,
         padding: const EdgeInsets.all(14),
         decoration: ShapeDecoration(
           color: Colors.white,
