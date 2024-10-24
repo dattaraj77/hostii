@@ -44,7 +44,7 @@ class _LoginBodyState extends State<LoginBody> {
   Future<void> handleLogin() async {
     if (_formKey.currentState!.validate()) {
       // Mock login action
-      if (email.text == "test@example.com" && password.text == "password") {
+      if (email.text == "t@mail.com" && password.text == "p") {
         // Navigate to the appropriate home screen
         if (widget.userType == 'admin') {
           Navigator.pushReplacement(
